@@ -1,0 +1,41 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+
+
+const app = express();
+const port = process.env.PORT;
+
+// Import models
+require('./api/models/ticketModel');
+require('./api/models/responseModel');
+require('./api/models/messageModel');
+require('./api/models/userModel');
+
+// Connect to MongoDB 
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+require('./api/routes/ticketRoutes')(app);
+require('./api/routes/responseRoutes')(app);
+require('./api/routes/messageRoutes')(app);
+require('./api/routes/userRoutes')(app);
+
+
+app.use((req, res) => {
+  res.status(404).json({ message: 'URL not found' });
+});
+
+
+app.listen(port, () => {
+  console.log(`Server is running on port http://localhost:${port}`);
+});
