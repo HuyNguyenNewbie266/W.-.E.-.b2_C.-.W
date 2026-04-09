@@ -12,7 +12,7 @@ const handleError = (fn) => async (...params) => {
     const res = await fn(...params);
     return res.data;
   } catch (error) {
-    console.error("Lỗi gọi API:", error.response?.data || error.message);
+    console.error("Error API:", error.response?.data || error.message);
     throw error;
   }
 };

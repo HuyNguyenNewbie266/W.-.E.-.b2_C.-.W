@@ -14,14 +14,14 @@
         <nav class="hidden flex-1 justify-center gap-10 md:flex">
           <router-link to="/" class="text-sm font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors">Home</router-link>
           <router-link to="/responses" class="text-sm font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors">Knowledge Base</router-link>
-          <router-link to="/tickets" class="text-sm font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors">My Tickets</router-link>
+          <router-link to="/my-tickets" class="text-sm font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors">My Tickets</router-link>
         </nav>
 
         <div class="flex items-center gap-4">
           <router-link to="/tickets/new" class="hidden sm:flex min-w-[120px] items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all active:scale-95">
             Submit Request
           </router-link>
-          <div class="h-10 w-10 rounded-full border-2 border-slate-200 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAYmigNQaIZTxD1rFLAqRLsnXApkjH_1glcEhYqrKrXPWZDtNrWYD2FE_33mUioYnk4Db9UzjnNNoYgyQZZG0UycIH_f7MvM0v7oIATMaD8qYCekUd891O0E2BSSiS1iNB9RJMeHz8O8vaESVM_BcH_-1H7aF7F1c3cpgnLXX7X9COK8d7EMJmXxxdynjxlWH4-g7_XrbDskrF5WvPjMJdPm6CjYkSgNXNEToQqvffWOisZMiLw313xz3GvATDDMn06w7iPTHr77Q')"></div>
+          <!-- <div class="h-10 w-10 rounded-full border-2 border-slate-200 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAYmigNQaIZTxD1rFLAqRLsnXApkjH_1glcEhYqrKrXPWZDtNrWYD2FE_33mUioYnk4Db9UzjnNNoYgyQZZG0UycIH_f7MvM0v7oIATMaD8qYCekUd891O0E2BSSiS1iNB9RJMeHz8O8vaESVM_BcH_-1H7aF7F1c3cpgnLXX7X9COK8d7EMJmXxxdynjxlWH4-g7_XrbDskrF5WvPjMJdPm6CjYkSgNXNEToQqvffWOisZMiLw313xz3GvATDDMn06w7iPTHr77Q')"></div> -->
         </div>
 
       </div>

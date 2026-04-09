@@ -13,7 +13,7 @@
             </p>
             
             <div class="mt-10 flex w-full max-w-lg flex-col gap-4 sm:flex-row">
-              <router-link to="/tickets/new" class="flex h-14 flex-1 items-center justify-center rounded-xl bg-primary px-8 text-base font-bold text-white shadow-xl shadow-primary/30 transition-all hover:translate-y-[-2px] hover:shadow-primary/40">
+              <router-link to="/submit" class="flex h-14 flex-1 items-center justify-center rounded-xl bg-primary px-8 text-base font-bold text-white shadow-xl shadow-primary/30 transition-all hover:translate-y-[-2px] hover:shadow-primary/40">
                 Submit Ticket
               </router-link>
               
@@ -22,12 +22,12 @@
               </router-link>
             </div>
             
-            <div class="mt-12 w-full max-w-2xl">
+            <!-- <div class="mt-12 w-full max-w-2xl">
               <div class="relative flex items-center group">
                 <span class="material-symbols-outlined absolute left-4 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
                 <input v-model="searchQuery" class="h-16 w-full rounded-2xl border-slate-200 bg-white/80 pl-12 pr-6 text-lg shadow-sm backdrop-blur-md focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all dark:border-slate-700 dark:bg-slate-900/80" placeholder="What do you need help with?" type="text"/>
               </div>
-            </div>
+            </div> -->
           </div>
 
           <div class="relative hidden lg:block">

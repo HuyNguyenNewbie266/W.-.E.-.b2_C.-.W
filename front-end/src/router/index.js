@@ -3,20 +3,45 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
   {
     path: '/',
-    redirect: '/HomeView'
+    redirect: '/Home'
   },
 
   {
-    path: '/tickets',
-    name: 'tickets',
+    path: '/ticket-details',
+    name: 'ticket-details',
+    component: () => import('../views/TicketDetailView.vue')
+  },
+
+  {
+    path: '/Home',
+    name: 'Home',
+    component: () => import('../views/HomeView.vue')
+  },
+
+  {
+    path: '/submit',
+    name: 'Submit',
+    component: () => import('../views/SubmitView.vue')
+  },
+
+  {
+    path: '/search',
+    name: 'Search',
+    component: () => import('../views/SearchView.vue')
+  },
+
+  {
+    path: '/my-tickets',
+    name: 'my-tickets',
     component: () => import('../views/Tickets.vue')
   },
 
-  {
-    path: '/HomeView',
-    name: 'HomeView',
-    component: () => import('../views/HomeView.vue')
-  },
+
+
+
+
+
+
   {
     path: '/responses',
     name: 'responses',
