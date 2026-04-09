@@ -18,6 +18,10 @@ const handleError = (fn) => async (...params) => {
 };
 
 export const api = {
+
+  auth:{
+    googleLogin: handleError((data) => apiClient.post('login', data)),
+  },
   
   users: {
     getAll:   handleError(() => apiClient.get('users')),

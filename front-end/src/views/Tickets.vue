@@ -2,14 +2,14 @@
   <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       
-      <aside class="lg:col-span-3 space-y-6">
+<aside class="lg:col-span-3 space-y-6">
         <div class="glass rounded-xl p-6 shadow-sm dark:bg-slate-900/40">
           <div class="flex flex-col items-center text-center">
             <div class="size-20 rounded-full border-4 border-white dark:border-slate-800 shadow-md mb-4 overflow-hidden">
-              <img alt="User avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCprGdBxbWlDRBSU0n_jkq2ikC1Ww7c72Jdjoq8PFgkFbMYO4aOzOsgtI3nJIB8jToLfAiI9tXIZg9C1Tnow5HiU7UYZPzDOkB8lp9nj5EW6MO7ymcZpKYzjuglgfzoWbnfS3MZ0A1ZZQ5NAd3iDzTzAYx8yk7xAaYLOMl29Co46ViBbx-mn8fkeFA2KFmAu1rnz3AK7ewa0PyDSSaOET_pa8LOiRrA46CBhdz5S3aNt07HFakwAD6BlSdULrRNstgRPWn3jgVsg"/>
+              <img alt="User avatar" :src="currentUser.avatar || 'https://ui-avatars.com/api/?name=' + currentUser.name"/>
             </div>
-            <h2 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Alex Johnson</h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400">alex.j@quickfix.io</p>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">{{ currentUser.name || 'Loading...' }}</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">{{ currentUser.email || '' }}</p>
           </div>
           
           <div class="mt-8 space-y-3">
@@ -22,22 +22,9 @@
             </div>
             
             <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-              <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-                <span class="material-symbols-outlined text-sm">hourglass_empty</span>
-                <span class="text-sm font-medium">Pending</span>
-              </div>
-              <span class="text-sm font-bold text-amber-500">{{ pendingTickets }}</span>
+
             </div>
           </div>
-          
-          <nav class="mt-8 space-y-1">
-            <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary font-semibold transition-colors" href="#">
-              <span class="material-symbols-outlined">dashboard</span> Overview
-            </a>
-            <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
-              <span class="material-symbols-outlined">history</span> Activity
-            </a>
-          </nav>
         </div>
       </aside>
 
@@ -96,7 +83,7 @@
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ ticket.category }} • {{ ticket.priority }} Priority</p>
                   </td>
                   <td class="px-6 py-5">
-                    <span :class="getStatusClasses(ticket.status).pill" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold">
+                    <span :class="getStatusClasses(ticket.status).pill" class="whitespace-nowrap inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold">
                       <span :class="getStatusClasses(ticket.status).dot" class="size-1.5 rounded-full"></span>
                       {{ ticket.status }}
                     </span>
@@ -105,9 +92,9 @@
                     {{ formatDate(ticket.createdAt) }}
                   </td>
                   <td class="px-6 py-5 text-right">
-                    <router-link :to="{ name: 'show-ticket', params: { id: ticket._id } }" class="text-primary hover:text-primary/80 font-bold text-sm">
+                    <!-- <router-link :to="{ name: 'show-ticket', params: { id: ticket._id } }" class="text-primary hover:text-primary/80 font-bold text-sm"> -->
                       View
-                    </router-link>
+                    <!-- </router-link> -->
                   </td>
                 </tr>
                 
@@ -130,19 +117,41 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { api } from '../helpers/api';
+// LƯU Ý: Chỉnh lại đường dẫn '../api' hay '../helpers/api' cho đúng với thư mục của bạn nhé!
+import { api } from '../helpers/api'; 
 import { useToast } from 'vue-toastification';
 
 const tickets = ref([]);
 const isLoading = ref(true);
-const filterStatus = ref('All'); // Trạng thái bộ lọc mặc định
+const filterStatus = ref('All');
 const toast = useToast();
+
+// Thêm biến lưu thông tin user đang đăng nhập
+const currentUser = ref({});
 
 // 1. Lấy dữ liệu từ Backend
 const fetchTickets = async () => {
   try {
-    tickets.value = await api.tickets.getAll();
+    // A. Lấy thông tin User từ localStorage
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      currentUser.value = JSON.parse(userData);
+    }
+
+    // B. Gọi API lấy tất cả tickets
+    const allTickets = await api.tickets.getAll();
+    console.log("Toàn bộ tickets từ Server:", allTickets); // Log ra để debug xem server có trả về ko
+
+    // C. LỌC: Chỉ giữ lại những ticket do user này tạo
+    // (Kiểm tra xem field 'submittedBy' có khớp với ID của user đang login không)
+    if (currentUser.value && currentUser.value.id) {
+      tickets.value = allTickets.filter(ticket => ticket.submittedBy === currentUser.value.id);
+    } else {
+      tickets.value = []; // Nếu chưa login thì ko có vé nào
+    }
+
   } catch (error) {
+    console.error("Lỗi lấy vé:", error);
     toast.error('Failed to load tickets');
   } finally {
     isLoading.value = false;
@@ -154,27 +163,21 @@ onMounted(() => {
 });
 
 // 2. Computed Properties (Xử lý logic mượt mà)
-// Lọc danh sách hiển thị dựa vào nút filter đang được bấm
 const filteredTickets = computed(() => {
   if (filterStatus.value === 'All') return tickets.value;
   return tickets.value.filter(ticket => ticket.status === filterStatus.value);
 });
 
-// Đếm tổng số lượng
 const totalTickets = computed(() => tickets.value.length);
-// Đếm các ticket không phải là Resolved (nghĩa là đang Open hoặc In Progress)
 const pendingTickets = computed(() => tickets.value.filter(t => t.status !== 'Resolved').length);
 
-
 // 3. Hàm tiện ích (Helpers)
-// Format ngày tháng cho đẹp
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A';
   const date = new Date(dateString);
   return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
-// Trả về CSS Classes tương ứng cho từng loại Status (dùng thiết kế màu của bạn)
 const getStatusClasses = (status) => {
   const map = {
     'Open': { 

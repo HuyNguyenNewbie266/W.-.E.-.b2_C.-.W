@@ -8,7 +8,7 @@ const ResponseSchema = new Schema({
 
   title: {
     type: String,
-    require: true
+    required: true
   },
 
   value: { 
@@ -17,6 +17,7 @@ const ResponseSchema = new Schema({
 
   category: { 
     type: String, 
+    enum: ['Account Management', 'Billing', 'Technical Support', 'Network'],
     required: true },
 
 },

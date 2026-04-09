@@ -115,44 +115,44 @@ const onDestroy = async (id) => {
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
               
               <div class="group relative flex flex-col p-6 rounded-xl border border-white/40 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md hover:border-primary/50 hover:shadow-[0_0_20px_rgba(36,99,235,0.1)] transition-all duration-300 cursor-pointer">
-                <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
-                  <span class="material-symbols-outlined text-3xl">rocket_launch</span>
-                </div>
-                <h3 class="text-lg font-bold mb-2">Getting Started</h3>
-                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Everything you need to set up your account and start.</p>
+            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-colors group-hover:bg-primary group-hover:text-white dark:bg-slate-700">
+              <span class="material-symbols-outlined">person</span>
+            </div>
+                <h3 class="text-lg font-bold mb-2">Account Management</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Security settings, profiles, and permissions.</p>
                 <div class="mt-4 text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-1">
                   View 12 articles <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </div>
               </div>
 
               <div class="group relative flex flex-col p-6 rounded-xl border border-white/40 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md hover:border-primary/50 hover:shadow-[0_0_20px_rgba(36,99,235,0.1)] transition-all duration-300 cursor-pointer">
-                <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
-                  <span class="material-symbols-outlined text-3xl">manage_accounts</span>
-                </div>
-                <h3 class="text-lg font-bold mb-2">Account & Profile</h3>
-                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Manage settings, security, and data preferences.</p>
+            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-colors group-hover:bg-primary group-hover:text-white dark:bg-slate-700">
+              <span class="material-symbols-outlined">payments</span>
+            </div>
+                <h3 class="text-lg font-bold mb-2">Billing</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Invoices, payment methods, and plans.</p>
                 <div class="mt-4 text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-1">
                   View 8 articles <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </div>
               </div>
 
               <div class="group relative flex flex-col p-6 rounded-xl border border-white/40 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md hover:border-primary/50 hover:shadow-[0_0_20px_rgba(36,99,235,0.1)] transition-all duration-300 cursor-pointer">
-                <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
-                  <span class="material-symbols-outlined text-3xl">payments</span>
-                </div>
-                <h3 class="text-lg font-bold mb-2">Billing & Payments</h3>
-                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Subscription plans, invoices, and payment methods.</p>
+            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-colors group-hover:bg-primary group-hover:text-white dark:bg-slate-700">
+              <span class="material-symbols-outlined">settings</span>
+            </div>
+                <h3 class="text-lg font-bold mb-2">Technical Support</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Software issues, bug reports, and tools.</p>
                 <div class="mt-4 text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-1">
                   View 15 articles <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </div>
               </div>
 
               <div class="group relative flex flex-col p-6 rounded-xl border border-white/40 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md hover:border-primary/50 hover:shadow-[0_0_20px_rgba(36,99,235,0.1)] transition-all duration-300 cursor-pointer">
-                <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
-                  <span class="material-symbols-outlined text-3xl">build</span>
-                </div>
-                <h3 class="text-lg font-bold mb-2">Troubleshooting</h3>
-                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Fix common issues and technical errors easily.</p>
+            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-colors group-hover:bg-primary group-hover:text-white dark:bg-slate-700">
+              <span class="material-symbols-outlined">api</span>
+            </div>
+                <h3 class="text-lg font-bold mb-2">Network</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Connectivity issues, troubleshooting, and configuration.</p>
                 <div class="mt-4 text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-1">
                   View 24 articles <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </div>
@@ -196,7 +196,7 @@ const onDestroy = async (id) => {
           
         </div>
 
-        <aside class="w-full lg:w-80">
+        <aside class="w-full lg:w-64">
           <div class="sticky top-24 space-y-6">
             
             <div class="p-6 rounded-2xl bg-primary text-white shadow-xl shadow-primary/20 relative overflow-hidden">
@@ -206,7 +206,7 @@ const onDestroy = async (id) => {
               <div class="relative z-10">
                 <h3 class="text-xl font-bold mb-2">Still need help?</h3>
                 <p class="text-primary-100/80 mb-6 text-sm">Can't find what you're looking for? Our support team is ready to assist you.</p>
-                <router-link to="/tickets/new" class="block text-center w-full bg-white text-primary font-bold py-3 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
+                <router-link to="/submit" class="block text-center w-full bg-white text-primary font-bold py-3 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
                   Submit a Ticket
                 </router-link>
               </div>

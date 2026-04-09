@@ -13,42 +13,38 @@
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div class="lg:col-span-2">
-          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-300 dark:border-slate-800 overflow-hidden">
             <form @submit.prevent="submitTicket" class="p-6 md:p-8 space-y-6">
-              
-                <input v-model="form.email" required class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-primary focus:border-primary text-slate-900 dark:text-white p-3 transition-all" id="email" placeholder="name@company.com" type="email"/>
               
               <div class="space-y-2">
                 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="subject">Subject</label>
-                <input v-model="form.subject" required class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-primary focus:border-primary text-slate-900 dark:text-white p-3 transition-all" id="subject" placeholder="Briefly describe the issue" type="text"/>
+                <input v-model="form.subject" required class="w-full rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 focus:ring-1 focus:ring-primary focus:border-primary text-slate-900 dark:text-white p-3 transition-all outline-none" id="subject" placeholder="Briefly describe the issue" type="text"/>
               </div>
               
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
                   <label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="category">Category</label>
-                  <select v-model="form.category" class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-primary focus:border-primary text-slate-900 dark:text-white p-3 transition-all" id="category">
-                    <option value="Technical Issue">Technical Issue</option>
-                    <option value="Billing & Subscription">Billing & Subscription</option>
-                    <option value="Account Access">Account Access</option>
-                    <option value="Feature Request">Feature Request</option>
-                    <option value="Other">Other</option>
+                  <select v-model="form.category" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 focus:ring-1 focus:ring-primary focus:border-primary text-slate-900 dark:text-white p-3 transition-all outline-none" id="category">
+                    <option value="Account Management">Account Management</option>
+                    <option value="Billing">Billing</option>
+                    <option value="Technical Support">Technical Support</option>
+                    <option value="Network">Network</option>
                   </select>
                 </div>
                 
                 <div class="space-y-2">
                   <label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="priority">Priority Level</label>
-                  <select v-model="form.priority" class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-primary focus:border-primary text-slate-900 dark:text-white p-3 transition-all" id="priority">
+                  <select v-model="form.priority" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 focus:ring-1 focus:ring-primary focus:border-primary text-slate-900 dark:text-white p-3 transition-all outline-none" id="priority">
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
                     <option value="High">High</option>
-                    <option value="Urgent">Urgent</option>
                   </select>
                 </div>
               </div>
               
               <div class="space-y-2">
                 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="description">Description</label>
-                <textarea v-model="form.description" required class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-primary focus:border-primary text-slate-900 dark:text-white p-3 transition-all" id="description" placeholder="Provide as much detail as possible..." rows="6"></textarea>
+                <textarea v-model="form.description" required class="w-full rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 focus:ring-1 focus:ring-primary focus:border-primary text-slate-900 dark:text-white p-3 transition-all outline-none" id="description" placeholder="Provide as much detail as possible..." rows="6"></textarea>
               </div>
               
               <div class="space-y-2">
@@ -66,9 +62,9 @@
               </div>
               
               <div class="pt-4">
-                <button class="w-full md:w-auto px-8 py-4 bg-primary text-white font-bold rounded-lg shadow-lg shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
-                  Submit Ticket
-                  <span class="material-symbols-outlined text-xl">send</span>
+                <button :disabled="isSubmitting" class="w-full md:w-auto px-8 py-4 bg-primary text-white font-bold rounded-lg shadow-lg shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:translate-y-0" type="submit">
+                  {{ isSubmitting ? 'Submitting...' : 'Submit Ticket' }}
+                  <span v-if="!isSubmitting" class="material-symbols-outlined text-xl">send</span>
                 </button>
               </div>
             </form>
@@ -118,8 +114,15 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
+// Đảm bảo đường dẫn import api chuẩn xác với project của bạn
+import { api } from '../helpers/api'; 
 
-// Search Sidebar
+const router = useRouter();
+const toast = useToast();
+
+const isSubmitting = ref(false);
 const searchQuery = ref('');
 
 // Xử lý File Input
@@ -131,28 +134,54 @@ const handleFileUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
     console.log('File selected:', file.name);
-    // Lưu file vào form object nếu cần gửi lên server
-    // form.attachment = file; 
   }
 };
 
-// Data Form
+// Data Form (Đã bỏ field email)
 const form = reactive({
-  email: '',
   subject: '',
-  category: 'Technical Issue',
+  category: 'Technical Support',
   priority: 'Medium',
   description: ''
 });
 
 // Submit Handler
-const submitTicket = () => {
-  console.log('Dữ liệu chuẩn bị gửi đi:', form);
+const submitTicket = async () => {
+  isSubmitting.value = true;
   
-  // Bạn có thể gọi API ở đây (ví dụ axios.post('/api/tickets', form))
-  alert('Gửi yêu cầu thành công!');
-  
-  // Reset form sau khi gửi (tuỳ chọn)
-  // Object.assign(form, { email: '', subject: '', category: 'Technical Issue', priority: 'Medium', description: '' });
+  try {
+    // 1. Lấy thông tin user đang đăng nhập từ localStorage
+    const userData = localStorage.getItem('user');
+    if (!userData) {
+      toast.error('Bạn cần đăng nhập để thực hiện thao tác này!');
+      router.push('/login');
+      return;
+    }
+    
+    const user = JSON.parse(userData);
+
+    // 2. Tạo payload khớp với model Ticket của backend
+    const payload = {
+      submittedBy: user.id, // Lấy ID của user
+      email: user.email,    // Lấy Email của user
+      subject: form.subject,
+      category: form.category,
+      priority: form.priority,
+      description: form.description
+    };
+
+    // 3. Gọi API thực tế
+    await api.tickets.create(payload);
+    
+    // 4. Thông báo và chuyển hướng
+    toast.success('Gửi yêu cầu thành công!');
+    router.push('/my-tickets'); // Đẩy về trang danh sách ticket
+    
+  } catch (error) {
+    console.error('Lỗi khi submit ticket:', error);
+    toast.error('Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau.');
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
