@@ -80,7 +80,7 @@ exports.update = async (req, res) => {
         description,
         status,
         relatedResponses },
-      { new: true , runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
     if (!updatedTicket) {
       return res.status(404).json({ message: 'Ticket not found' });
@@ -98,6 +98,45 @@ exports.delete = async (req, res) => {
       return res.status(404).json({ message: 'Ticket not found' });
     }
     res.json({ message: 'Ticket deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.get_tickets_by_user = async (req, res) => {
+  try {
+    const userId = req.params.id; // Lấy từ URL /tickets/user/:id
+    const { cursor, limit = 5, status } = req.query; // Lấy từ chuỗi params do Axios gửi lên
+
+    let query = { submittedBy: userId };
+
+    if (status && status !== 'All') {
+      query.status = status;
+    }
+
+    if (cursor) {
+      query._id = { $lt: cursor };
+    }
+
+    const tickets = await Ticket.find(query)
+      .sort({ _id: -1 })
+      .limit(parseInt(limit));
+
+    let nextCursor = null;
+    if (tickets.length === parseInt(limit)) {
+      nextCursor = tickets[tickets.length - 1]._id;
+    }
+
+    const total = await Ticket.countDocuments({ submittedBy: userId });
+    const pending = await Ticket.countDocuments({ submittedBy: userId, status: { $ne: 'Resolved' } });
+
+    res.json({
+      data: tickets,
+      nextCursor,
+      total,
+      pending
+    });
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

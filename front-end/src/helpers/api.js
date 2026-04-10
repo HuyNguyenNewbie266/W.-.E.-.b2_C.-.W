@@ -37,6 +37,7 @@ export const api = {
     create:   handleError((data) => apiClient.post('tickets', data)),
     update:   handleError((id, data) => apiClient.put(`tickets/${id}`, data)),
     delete:   handleError((id) => apiClient.delete(`tickets/${id}`)),
+    getByUser: handleError((id, params) => apiClient.get(`tickets/user/${id}`, { params })),
   },
 
   responses: {

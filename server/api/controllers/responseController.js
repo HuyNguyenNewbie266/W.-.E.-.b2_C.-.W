@@ -67,7 +67,7 @@ exports.update = async (req, res) => {
       value, 
       category
      },
-      { new: true , runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
     if (!updatedResponse) {
       return res.status(404).json({ message: 'Response not found' });

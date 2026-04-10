@@ -48,7 +48,7 @@ exports.update = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       { email, password, name, role },
-      { new: true , runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });

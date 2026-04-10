@@ -47,7 +47,7 @@ const routes = [
 
 
   {
-    path: '/ticket-details',
+    path: '/ticket-details/:id',
     name: 'ticket-details',
     component: () => import('../views/TicketDetailView.vue'),
     meta: { requiresAuth: true ,

@@ -55,7 +55,7 @@ exports.update = async (req, res) => {
       ticket, 
       sender, 
       message },
-      { new: true , runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
     if (!updatedMessage) {
       return res.status(404).json({ message: 'Message not found' });
