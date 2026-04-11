@@ -21,6 +21,7 @@ app.use(Toast, {
 
 app.use(vue3GoogleLogin, {
   clientId: '916528742807-9a1dtd7t0gsu6ge1f96c63n6tf37dil9.apps.googleusercontent.com'
+
 });
 
 app.mount('#app');

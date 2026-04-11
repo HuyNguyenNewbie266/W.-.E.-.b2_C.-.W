@@ -47,7 +47,7 @@
                 <textarea v-model="form.description" required class="w-full rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-slate-800 focus:ring-1 focus:ring-primary focus:border-primary text-slate-900 dark:text-white p-3 transition-all outline-none" id="description" placeholder="Provide as much detail as possible..." rows="6"></textarea>
               </div>
               
-              <div class="space-y-2">
+              <!-- <div class="space-y-2">
                 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Attachments</label>
                 <div @click="triggerFileInput" class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-slate-50/50 dark:bg-slate-800/50 group cursor-pointer hover:border-primary transition-colors">
                   <div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
@@ -59,7 +59,7 @@
                   </div>
                   <input type="file" ref="fileInput" class="hidden" @change="handleFileUpload" />
                 </div>
-              </div>
+              </div> -->
               
               <div class="pt-4">
                 <button :disabled="isSubmitting" class="w-full md:w-auto px-8 py-4 bg-primary text-white font-bold rounded-lg shadow-lg shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:translate-y-0" type="submit">
@@ -74,20 +74,21 @@
         <aside class="space-y-6">
           <div class="glass p-6 rounded-xl border border-slate-200 dark:border-slate-800 dark:bg-slate-800/70">
             <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Need an immediate answer?</h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mb-6">Search our help center for instant solutions before submitting a ticket.</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-6">Ask AI agent for instant solutions before submitting a ticket.</p>
             
-            <div class="relative mb-6">
+            <!-- <div class="relative mb-6">
               <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
               <input v-model="searchQuery" class="w-full pl-10 pr-4 py-3 rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-primary focus:border-primary text-sm" placeholder="Search knowledge base..." type="text"/>
-            </div>
+            </div> -->
             
-            <a class="flex items-center justify-between p-4 rounded-lg bg-primary/5 hover:bg-primary/10 text-primary font-semibold transition-all group" href="#">
+            
+            <router-link to="/ai-chat" class="flex items-center justify-between p-4 rounded-lg bg-primary/5 hover:bg-primary/10 text-primary font-semibold transition-all group" href="">
               <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined">forum</span>
-                <span>Start Live Chat</span>
+                <span>Ask AI Agent</span>
               </div>
               <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </a>
+            </router-link>
           </div>
 
           <div class="p-6 rounded-xl bg-slate-900 text-white relative overflow-hidden">
@@ -117,7 +118,7 @@ import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 // Đảm bảo đường dẫn import api chuẩn xác với project của bạn
-import { api } from '../helpers/api'; 
+import { api } from '../helpers/apiHelper'; 
 
 const router = useRouter();
 const toast = useToast();
@@ -153,7 +154,7 @@ const submitTicket = async () => {
     // 1. Lấy thông tin user đang đăng nhập từ localStorage
     const userData = localStorage.getItem('user');
     if (!userData) {
-      toast.error('Bạn cần đăng nhập để thực hiện thao tác này!');
+      toast.error('You need to be logged in to perform this action!');
       router.push('/login');
       return;
     }
@@ -174,12 +175,13 @@ const submitTicket = async () => {
     await api.tickets.create(payload);
     
     // 4. Thông báo và chuyển hướng
-    toast.success('Gửi yêu cầu thành công!');
+    toast.success('Your ticket has been submitted successfully!');
+  
     router.push('/my-tickets'); // Đẩy về trang danh sách ticket
     
   } catch (error) {
-    console.error('Lỗi khi submit ticket:', error);
-    toast.error('Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau.');
+    console.error('Failed to submit ticket', error);
+    toast.error('Failed to submit ticket. Please try again later.');
   } finally {
     isSubmitting.value = false;
   }

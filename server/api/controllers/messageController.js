@@ -78,3 +78,33 @@ exports.delete = async (req, res) => {
   }
 };
 
+exports.get_messages_by_ticket = async (req, res) => {
+  try {
+    const ticketId = req.params.id;
+    const { cursor, limit = 5 } = req.query; // Nhận cursor và limit
+
+    let query = { ticket: ticketId };
+    
+    if (cursor) {
+      // Sắp xếp tin nhắn mới nhất lên đầu, nên lấy những tin cũ hơn cursor (nhỏ hơn cursor)
+      query._id = { $lt: cursor };
+    }
+
+    const messages = await Message.find(query)
+      .sort({ _id: -1 }) // Tin nhắn mới nhất xếp trên cùng
+      .limit(parseInt(limit))
+      .populate('sender', 'name');
+
+    let nextCursor = null;
+    if (messages.length === parseInt(limit)) {
+      nextCursor = messages[messages.length - 1]._id;
+    }
+
+    res.json({
+      data: messages,
+      nextCursor
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

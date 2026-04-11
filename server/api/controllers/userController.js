@@ -87,10 +87,17 @@ exports.delete = async (req, res) => {
       if (!user) {
         user = new User({
           email,
-          name
+          name,
+          role: 'staff',
         });
         await user.save();
       } 
+
+      if (!user) {
+        return res.status(401).json({ 
+          message: 'No account associated with this Google email. Please register first.',
+        });
+      }
 
       const token = jwt.sign(
       { id: user._id, email: user.email }, 
@@ -105,6 +112,7 @@ exports.delete = async (req, res) => {
         id: user._id,
         email: user.email,
         name: user.name,
+        role: user.role,
         avatar: picture
       }
     });

@@ -125,7 +125,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { api } from '../helpers/api'; 
+import { api } from '../helpers/apiHelper'; 
 import { useToast } from 'vue-toastification';
 import { useRouter } from 'vue-router';
 

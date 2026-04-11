@@ -15,7 +15,7 @@
       </div>
 
       <div class="w-full flex justify-center mt-4">
-        <GoogleLogin :callback="handleGoogleCallback" />
+        <GoogleLogin :callback="handleGoogleCallback" :button-config="googleButtonConfig"/>
       </div>
 
       <div class="mt-10 pt-8 border-t border-slate-200 w-full text-center dark:border-slate-700">
@@ -28,10 +28,23 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import { api } from '../helpers/api';
+import { api } from '../helpers/apiHelper';
+import { ref } from 'vue';
 
 const router = useRouter();
 const toast = useToast();
+
+const googleButtonConfig = ref({
+   // Ép tiếng Anh
+  theme: 'filled_blue', // Giao diện màu đen (rất hợp với Dark Mode)
+  size: 'large', // Nút to ra
+  shape: 'square', // Bo góc nhẹ (có thể đổi thành 'pill' để bo tròn hẳn)
+  width: '400', // Đặt chiều rộng cố định để nút trông cân đối
+  locale: 'zh_CN',
+  text: 'continue_with',
+  logo_alignment: 'center',
+});
+
 
 const emit = defineEmits(['login-success']);
 
@@ -46,16 +59,17 @@ const handleGoogleCallback = async (response) => {
     // Lưu Token và thông tin User vào localStorage
     localStorage.setItem('token', res.token);
     localStorage.setItem('user', JSON.stringify(res.user));
+    localStorage.setItem('role', res.user.role);
     
-    toast.success('Đăng nhập thành công!');
+    toast.success('Login successful');
     
     // Chuyển hướng về trang chủ
     router.push('/');
     emit('login-success');
     
   } catch (error) {
-    console.error('Lỗi đăng nhập Google:', error);
-    toast.error('Đăng nhập thất bại. Vui lòng thử lại.');
+    console.error('Failed to login with Google:', error);
+    toast.error('Failed to login. Please try again or contact your administrator.');
   }
 };
 </script>

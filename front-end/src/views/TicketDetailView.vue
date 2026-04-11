@@ -62,7 +62,8 @@
                   <div class="flex justify-between items-start mb-3">
                     <div class="flex items-center gap-3">
                       <span class="text-slate-900 dark:text-white font-bold text-sm">
-                        {{ activity.senderName || 'User' }} </span>
+                        {{ activity.sender.name || 'User' }} 
+                      </span>
                     </div>
                     <span class="text-xs text-slate-400">{{ formatTime(activity.createdAt) }}</span>
                   </div>
@@ -71,6 +72,17 @@
                   </p>
                 </div>
               </div>
+            </div>
+
+            <div v-if="nextCursor" class="text-center mt-2 mb-6">
+              <button 
+                @click="loadMoreMessages" 
+                :disabled="isLoadingMore"
+                class="px-5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-600 dark:text-slate-300 rounded-full shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 flex items-center gap-2 mx-auto">
+                <span v-if="isLoadingMore" class="material-symbols-outlined animate-spin text-sm">autorenew</span>
+                <span v-else class="material-symbols-outlined text-sm">history</span>
+                {{ isLoadingMore ? 'Loading...' : 'View older comments' }}
+              </button>
             </div>
 
             <div v-if="ticket.status !== 'Resolved'" class="glass rounded-xl p-4 mt-6 dark:bg-slate-800/40">
@@ -96,7 +108,6 @@
         </div>
 
         <aside class="lg:col-span-4 space-y-6 sticky top-8">
-          
           <div class="glass rounded-xl divide-y divide-slate-100 dark:divide-slate-700 dark:bg-slate-800/40">
             <div class="p-6">
               <h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-6">Ticket Properties</h3>
@@ -130,7 +141,6 @@
                 
               </div>
             </div>
-
           </div>
         </aside>
       </div>
@@ -143,21 +153,26 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 // Đảm bảo import api đúng với đường dẫn trong project của bạn
-import { api } from '../helpers/api'; 
+import { api } from '../helpers/apiHelper'; 
 
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 
 const ticket = ref({});
-const activities = ref([]);
+const activities = ref([]); // Danh sách bình luận
 const newComment = ref('');
 const currentUser = ref(null);
 
 const isLoading = ref(true);
 const isPosting = ref(false);
+const isLoadingMore = ref(false);
 
-// 1. Khởi tạo: Lấy thông tin user và gọi API
+// Con trỏ phân trang cho Comments
+const nextCursor = ref(null);
+const LIMIT_PER_PAGE = 5;
+
+// 1. Khởi tạo
 onMounted(async () => {
   const userData = localStorage.getItem('user');
   if (userData) {
@@ -170,18 +185,17 @@ onMounted(async () => {
   await loadData();
 });
 
-// 2. Tải dữ liệu Ticket và Message
+// 2. Tải dữ liệu trang
 const loadData = async () => {
   try {
     isLoading.value = true;
-    const ticketId = route.params.id; // Lấy ID từ thanh URL
+    const ticketId = route.params.id;
 
-    // Gọi API lấy Ticket
+    // Lấy Ticket Info
     ticket.value = await api.tickets.getById(ticketId);
 
-    // Lấy tất cả Message và lọc ra những tin nhắn thuộc về Ticket này
-    const allMessages = await api.messages.getAll();
-    activities.value = allMessages.filter(msg => msg.ticket === ticketId);
+    // Lấy Messages (Comments) lần đầu
+    await fetchMessages(false);
 
   } catch (error) {
     console.error("Lỗi lấy chi tiết vé:", error);
@@ -191,7 +205,46 @@ const loadData = async () => {
   }
 };
 
-// 3. Gửi Comment mới
+// 3. Hàm Fetch Messages (Xử lý Pagination)
+const fetchMessages = async (isLoadMore = false) => {
+  try {
+    if (isLoadMore) {
+      isLoadingMore.value = true;
+    }
+
+    // Gọi API getByTicket kèm params phân trang
+    const response = await api.messages.getByTicket(ticket.value._id, {
+      limit: LIMIT_PER_PAGE,
+      cursor: isLoadMore ? nextCursor.value : null
+    });
+
+    if (isLoadMore) {
+      // Nối thêm bình luận cũ xuống dưới
+      activities.value = [...activities.value, ...response.data];
+    } else {
+      // Tải lại trang đầu tiên (khi mới vào hoặc vừa gửi tin nhắn mới)
+      activities.value = response.data;
+    }
+
+    // Cập nhật con trỏ cho lần bấm tiếp theo
+    nextCursor.value = response.nextCursor;
+
+  } catch (error) {
+    console.error("Lỗi tải bình luận:", error);
+    toast.error("Không thể tải danh sách bình luận.");
+  } finally {
+    isLoadingMore.value = false;
+  }
+};
+
+// Hàm gọi khi bấm "View older comments"
+const loadMoreMessages = () => {
+  if (nextCursor.value) {
+    fetchMessages(true);
+  }
+};
+
+// 4. Gửi Comment mới
 const postComment = async () => {
   if (!newComment.value.trim()) return;
   
@@ -199,18 +252,17 @@ const postComment = async () => {
   try {
     const payload = {
       ticket: ticket.value._id,
-      sender: currentUser.value.id, // Lấy ID của user đang đăng nhập
+      sender: currentUser.value.id,
       message: newComment.value
     };
 
     await api.messages.create(payload);
-    
     toast.success("Bình luận đã được gửi!");
     newComment.value = ''; // Xoá ô text
     
-    // Tải lại danh sách activity để hiện comment mới
-    const allMessages = await api.messages.getAll();
-    activities.value = allMessages.filter(msg => msg.ticket === ticket.value._id);
+    // Đặt lại cursor và tải lại từ đầu để hiện tin nhắn mới nhất lên trên
+    nextCursor.value = null;
+    await fetchMessages(false);
     
   } catch (error) {
     console.error("Lỗi gửi tin nhắn:", error);
@@ -220,7 +272,7 @@ const postComment = async () => {
   }
 };
 
-// 4. Đóng Ticket (Đổi trạng thái thành Resolved)
+// 5. Đóng Ticket
 const closeTicket = async () => {
   if(!confirm("Bạn có chắc chắn muốn đóng ticket này không?")) return;
   
@@ -230,13 +282,13 @@ const closeTicket = async () => {
       status: 'Resolved'
     });
     toast.success("Ticket đã được đóng.");
-    await loadData(); // Tải lại trang để cập nhật UI
+    await loadData(); 
   } catch (error) {
     toast.error("Lỗi khi cập nhật trạng thái.");
   }
 };
 
-// --- CÁC HÀM TIỆN ÍCH (HELPERS) ---
+// --- CÁC HÀM TIỆN ÍCH ---
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A';
   return new Date(dateString).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });

@@ -1,7 +1,9 @@
 <template>
   <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
     
-    <header v-if="!$route.meta.hideLayout" class="sticky top-0 z-50 w-full border-b border-slate-200/60 bg-white/80 backdrop-blur-md dark:border-slate-800 dark:bg-background-dark/80">
+    
+
+    <header v-if="!$route.meta.hideLayout" class="fixed top-0 left-0 w-full z-50 border-b border-slate-200/60  backdrop-blur-md dark:border-slate-800 dark:bg-background-dark/80 " :class="user?.role === 'admin'? 'bg-primary' : ''">
       <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
         
         <div class="flex items-center gap-2">
@@ -12,13 +14,17 @@
               class="h-full w-full object-cover"
             />
           </div>
-          <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">HelpDesk-GCS230465</span>
+          <span :class="user?.role === 'admin' ? 'text-xl font-bold tracking-tight text-slate-900 text-white' : 'text-xl font-bold tracking-tight text-slate-900 dark:text-white'">{{ user?.role === 'admin' ? 'Admin' : 'HelpDesk-GCS230465' }}</span>
         </div>
 
-        <nav class="hidden flex-1 justify-center gap-10 md:flex">
-          <router-link to="/" class="text-sm font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors">Home</router-link>
-          <router-link to="/responses" class="text-sm font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors">Knowledge Base</router-link>
-          <router-link to="/my-tickets" class="text-sm font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors">My Tickets</router-link>
+        <nav class="hidden flex-1 justify-center gap-10 md:flex text-white">
+          <router-link to="/" class="text-sm font-semibold  dark:text-slate-300 dark:hover:text-primary transition-colors" :class="user?.role === 'admin' ? 'text-white hover:text-slate-400' : 'text-slate-600 hover:text-primary'">Home</router-link>
+          <router-link v-if="user?.role === 'admin'" to="/admin/search" class="text-sm font-semibold   dark:text-slate-300 dark:hover:text-primary transition-colors" :class="user?.role === 'admin' ? 'text-white hover:text-slate-400' : 'text-slate-600 hover:text-primary'">Admin Search</router-link>
+          <router-link v-if="user?.role === 'admin'" to="/admin/create" class="text-sm font-semibold   dark:text-slate-300 dark:hover:text-primary transition-colors" :class="user?.role === 'admin' ? 'text-white hover:text-slate-400' : 'text-slate-600 hover:text-primary'">Admin Create</router-link>
+          <router-link v-if="user?.role !== 'admin'" to="/responses" class="text-sm font-semibold   dark:text-slate-300 dark:hover:text-primary transition-colors" :class="user?.role === 'admin' ? 'text-white hover:text-slate-400' : 'text-slate-600 hover:text-primary'">Knowledge Base</router-link>
+          <router-link v-if="user?.role !== 'admin'" to="/my-tickets" class="text-sm font-semibold   dark:text-slate-300 dark:hover:text-primary transition-colors" :class="user?.role === 'admin' ? 'text-white hover:text-slate-400' : 'text-slate-600 hover:text-primary'">My Tickets</router-link>
+          <router-link v-if="user?.role !== 'admin'" to="/test" class="text-sm font-semibold   dark:text-slate-300 dark:hover:text-primary transition-colors" :class="user?.role === 'admin' ? 'text-white hover:text-slate-400' : 'text-slate-600 hover:text-primary'">Test</router-link>
+          
         </nav>
 
         <div class="flex items-center gap-4">
@@ -54,24 +60,28 @@
       </div>
     </header>
 
-    <main  class="flex-1 w-full mx-auto max-w-7xl px-6 py-10 lg:px-10">
+    <main  class="flex-1 w-full mx-auto max-w-7xl px-6 pt-20 pb-20 lg:px-10">
       <router-view @login-success="handleLoginSuccess" />
     </main>
 
     
     <footer class="mt-auto border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-background-dark">
       <div class="mx-auto max-w-7xl px-6 py-12 lg:px-10">
-        <div class="grid gap-10 lg:grid-cols-4">
+        <div class="grid gap-10 lg:grid-cols-3">
           
           <div class="lg:col-span-1">
-            <div class="flex items-center gap-2">
-              <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
-                <span class="material-symbols-outlined text-lg">bolt</span>
-              </div>
-              <span class="text-lg font-bold text-slate-900 dark:text-white">QuickFix</span>
-            </div>
+        <div class="flex items-center gap-2">
+          <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg bg-primary">
+            <img 
+              src="./assets/image-icon.png" 
+              alt="Logo" 
+              class="h-full w-full object-cover"
+            />
+          </div>
+          <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">HelpDesk-GCS230465</span>
+        </div>
             <p class="mt-4 text-sm text-slate-500 leading-relaxed">
-              Empowering teams with instant solutions and intelligent support tools since 2021.
+              This is a demo helpdesk system built for the Web Programming 2 course. It allows users to submit support tickets, view their ticket history, and access a knowledge base of common issues and solutions.
             </p>
           </div>
 
@@ -79,10 +89,10 @@
             <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Contact Support</h4>
             <ul class="mt-4 space-y-3">
               <li class="flex items-center gap-2 text-sm text-slate-500">
-                <span class="material-symbols-outlined text-base">mail</span> support@quickfix.io
+                <span class="material-symbols-outlined text-base">mail</span> huynguyen2662005@gmail.com
               </li>
               <li class="flex items-center gap-2 text-sm text-slate-500">
-                <span class="material-symbols-outlined text-base">call</span> +1 (888) QFIX-NOW
+                <span class="material-symbols-outlined text-base">call</span> +84 347 849 872
               </li>
             </ul>
           </div>
@@ -90,23 +100,19 @@
           <div>
             <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Socials</h4>
             <div class="mt-4 flex gap-4">
-              <span class="text-sm text-slate-500">Facebook | Twitter | LinkedIn</span>
+              <a href="https://www.facebook.com/nguyen.tan.huy.259851" target="_blank">
+              <span class="text-sm text-slate-500">Facebook</span>
+              </a>
             </div>
           </div>
 
-          <div>
-            <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Status</h4>
-            <div class="mt-4 flex items-center gap-2">
-              <span class="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
-              <span class="text-sm font-medium text-slate-600 dark:text-slate-400">All Systems Operational</span>
-            </div>
-          </div>
+
 
         </div>
         
         <div class="mt-12 border-t border-slate-100 pt-8 dark:border-slate-800">
           <p class="text-center text-xs text-slate-400">
-            © 2026 QuickFix Inc. All rights reserved. Built with precision for your productivity.
+            © 2026 Nguyen Tan Huy - GCS230465. All rights reserved.
           </p>
         </div>
       </div>
@@ -130,7 +136,7 @@ const checkUser = () => {
     try {
       user.value = JSON.parse(userData);
     } catch (e) {
-      console.error("Lỗi parse dữ liệu user:", e);
+      console.error("Error:", e);
       user.value = null;
     }
   } else {

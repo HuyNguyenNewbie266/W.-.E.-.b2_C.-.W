@@ -9,7 +9,7 @@
               Having trouble? <span class="text-primary">Fast solutions.</span> Zero hassle.
             </h1>
             <p class="mt-6 text-lg font-medium text-slate-600 dark:text-slate-400 lg:text-xl">
-              Submit a support request or find a solution in seconds. Our AI-powered desk is ready to assist.
+              Submit a support request or find a solution in seconds.
             </p>
             
             <div class="mt-10 flex w-full max-w-lg flex-col gap-4 sm:flex-row">
@@ -64,7 +64,7 @@
           <p class="text-sm text-slate-500">Need direct help? Open a new ticket.</p>
         </router-link>
 
-        <router-link to="/submit" class="glass flex flex-col items-center justify-center gap-4 rounded-2xl p-10 text-center transition-all hover:scale-[1.02] hover:bg-white dark:bg-slate-800/40 text-slate-900">
+        <router-link to="/my-tickets" class="glass flex flex-col items-center justify-center gap-4 rounded-2xl p-10 text-center transition-all hover:scale-[1.02] hover:bg-white dark:bg-slate-800/40 text-slate-900">
           <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <span class="material-symbols-outlined text-4xl">confirmation_number</span>
           </div>
@@ -72,13 +72,13 @@
           <p class="text-sm text-slate-500">Track status of your existing requests.</p>
         </router-link>
 
-        <div class="glass flex flex-col items-center justify-center gap-4 rounded-2xl p-10 text-center transition-all hover:scale-[1.02] hover:bg-white dark:bg-slate-800/40 cursor-pointer">
+        <router-link to="/ai-chat" class="glass flex flex-col items-center justify-center gap-4 rounded-2xl p-10 text-center transition-all hover:scale-[1.02] hover:bg-white dark:bg-slate-800/40 text-slate-900">
           <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <span class="material-symbols-outlined text-4xl">chat</span>
           </div>
           <h3 class="text-xl font-bold">Live Chat</h3>
           <p class="text-sm text-slate-500">Speak with an agent right now.</p>
-        </div>
+        </router-link>
 
       </div>
     </section>
@@ -91,41 +91,42 @@
         </div>
         
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <div class="group relative flex flex-col gap-4 rounded-2xl bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 dark:bg-slate-800">
+          
+          <router-link to="/search?q=Account+Management" class="group relative flex flex-col gap-4 rounded-2xl bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 dark:bg-slate-800">
             <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-colors group-hover:bg-primary group-hover:text-white dark:bg-slate-700">
               <span class="material-symbols-outlined">person</span>
             </div>
             <h3 class="text-lg font-bold leading-tight">Account Management</h3>
             <p class="text-sm text-slate-500">Security settings, profiles, and permissions.</p>
             <div class="absolute inset-0 rounded-2xl border-2 border-transparent transition-all group-hover:border-primary/20"></div>
-          </div>
+          </router-link>
           
-          <div class="group relative flex flex-col gap-4 rounded-2xl bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 dark:bg-slate-800">
+          <router-link to="/search?q=Billing" class="group relative flex flex-col gap-4 rounded-2xl bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 dark:bg-slate-800">
             <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-colors group-hover:bg-primary group-hover:text-white dark:bg-slate-700">
               <span class="material-symbols-outlined">payments</span>
             </div>
             <h3 class="text-lg font-bold leading-tight">Billing</h3>
             <p class="text-sm text-slate-500">Invoices, payment methods, and plans.</p>
             <div class="absolute inset-0 rounded-2xl border-2 border-transparent transition-all group-hover:border-primary/20"></div>
-          </div>
+          </router-link>
           
-          <div class="group relative flex flex-col gap-4 rounded-2xl bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 dark:bg-slate-800">
+          <router-link to="/search?q=Technical+Support" class="group relative flex flex-col gap-4 rounded-2xl bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 dark:bg-slate-800">
             <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-colors group-hover:bg-primary group-hover:text-white dark:bg-slate-700">
               <span class="material-symbols-outlined">settings</span>
             </div>
             <h3 class="text-lg font-bold leading-tight">Technical Support</h3>
             <p class="text-sm text-slate-500">Software issues, bug reports, and tools.</p>
             <div class="absolute inset-0 rounded-2xl border-2 border-transparent transition-all group-hover:border-primary/20"></div>
-          </div>
+          </router-link>
           
-          <div class="group relative flex flex-col gap-4 rounded-2xl bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 dark:bg-slate-800">
+          <router-link to="/search?q=Network" class="group relative flex flex-col gap-4 rounded-2xl bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 dark:bg-slate-800">
             <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-colors group-hover:bg-primary group-hover:text-white dark:bg-slate-700">
               <span class="material-symbols-outlined">api</span>
             </div>
             <h3 class="text-lg font-bold leading-tight">Network</h3>
             <p class="text-sm text-slate-500">Connectivity issues, troubleshooting, and configuration.</p>
             <div class="absolute inset-0 rounded-2xl border-2 border-transparent transition-all group-hover:border-primary/20"></div>
-          </div>
+          </router-link>
         </div>
       </div>
     </section>
