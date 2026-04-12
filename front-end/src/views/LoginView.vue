@@ -4,7 +4,7 @@
       
       <div class="flex items-center gap-2 mb-10">
         <div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg bg-primary">
-          <img src="../assets/image-icon.png" alt="QuickFix Logo" class="h-full w-full object-cover" />
+          <img src="../assets/image-icon.png" alt="Logo" class="h-full w-full object-cover" />
         </div>
         <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">HelpDesk-GCS230465</span>
       </div>
@@ -39,10 +39,9 @@ const googleButtonConfig = ref({
   theme: 'filled_blue', // Giao diện màu đen (rất hợp với Dark Mode)
   size: 'large', // Nút to ra
   shape: 'square', // Bo góc nhẹ (có thể đổi thành 'pill' để bo tròn hẳn)
-  width: '400', // Đặt chiều rộng cố định để nút trông cân đối
-  locale: 'zh_CN',
+  width: '300', // Đặt chiều rộng cố định để nút trông cân đối
+  locale: 'en',
   text: 'continue_with',
-  logo_alignment: 'center',
 });
 
 

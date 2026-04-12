@@ -10,7 +10,7 @@
           <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg bg-primary">
             <img 
               src="./assets/image-icon.png" 
-              alt="QuickFix Logo" 
+              alt="Logo" 
               class="h-full w-full object-cover"
             />
           </div>
