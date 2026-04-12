@@ -101,7 +101,7 @@ exports.delete = async (req, res) => {
 
       const token = jwt.sign(
       { id: user._id, email: user.email }, 
-      process.env.SECRET_KEY, 
+      'MyNameIsHuyNguyenAndThisIsASecretKeyForJWT', 
       { expiresIn: '24h' }
     );
 

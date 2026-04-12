@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
-const port = process.env.PORT;
+const port = 3000;
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 phút
   max: 150, // Giới hạn mỗi IP tối đa 150 request trong 15 phút
@@ -23,7 +23,7 @@ require('./api/models/userModel');
 
 // Connect to MongoDB 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect('mongodb+srv://userid:huy123@cluster0.9jdtkaq.mongodb.net/helpdesk')
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
