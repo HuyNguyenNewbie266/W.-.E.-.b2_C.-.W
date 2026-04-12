@@ -6,9 +6,7 @@
         <h1 class="text-3xl font-black text-slate-900 dark:text-white">Create New Record</h1>
         <p class="text-slate-500 mt-1">Select the type of record you want to add to the database.</p>
       </div>
-      <button @click="$router.back()" class="text-slate-500 hover:text-primary font-bold text-sm flex items-center gap-1 glass px-4 py-2 rounded-lg">
-        <span class="material-symbols-outlined text-sm">arrow_back</span> Back
-      </button>
+
     </div>
 
     <div class="flex gap-4 mb-8">
