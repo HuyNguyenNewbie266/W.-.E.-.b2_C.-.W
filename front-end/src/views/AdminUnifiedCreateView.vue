@@ -62,13 +62,13 @@
 
         <template v-else>
           <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
-            <!-- <div class="space-y-2">
+            <div class="space-y-2">
               <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Full Name</label>
-              <input v-model="userForm.name" required class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 p-3 outline-none focus:ring-2 focus:ring-purple-500" type="text" placeholder="John Doe"/>
-            </div> -->
+              <input v-model="userForm.name" required class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 p-3 outline-none focus:ring-2 focus:ring-blue-500" type="text" placeholder="John Doe"/>
+            </div>
             <div class="space-y-2">
               <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Email Address</label>
-              <input v-model="userForm.email" required class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 p-3 outline-none focus:ring-2 focus:ring-purple-500" type="email" placeholder="john@company.com"/>
+              <input v-model="userForm.email" required class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 p-3 outline-none focus:ring-2 focus:ring-blue-500" type="email" placeholder="john@company.com"/>
             </div>
             <!-- <div class="space-y-2">
               <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Password</label>

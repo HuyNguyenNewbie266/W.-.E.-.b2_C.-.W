@@ -6,12 +6,12 @@ const routes = [
     redirect: '/home',
   },
 
-  // --- CÁC ROUTE DÀNH CHO ADMIN ---
+  // Admin's routes
   {
     path: '/admin/search',
     name: 'AdminSearch',
     component: () => import('../views/AdminSearchView.vue'),
-    meta: { requiresAuth: true, requiresAdmin: true } 
+    meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
     path: '/admin/edit/:id',
@@ -25,8 +25,8 @@ const routes = [
     component: () => import('../views/AdminUnifiedCreateView.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
-  
-  // --- CÁC ROUTE CHUNG (USER & ADMIN ĐỀU VÀO ĐƯỢC) ---
+
+  // Common routes
   {
     path: '/ai-chat',
     name: 'ai-chat',
@@ -93,7 +93,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  linkActiveClass: 'active', 
+  linkActiveClass: 'active',
   routes
 });
 
@@ -101,11 +101,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin); // Kiểm tra xem route có cần quyền admin không
-  
+
   const isAuthenticated = !!localStorage.getItem('token');
-  
+
   // Giả sử bạn lưu role của user dưới dạng 'role' trong localStorage lúc đăng nhập (ví dụ: 'admin' hoặc 'user')
-  const userRole = localStorage.getItem('role'); 
+  const userRole = localStorage.getItem('role');
 
   if (requiresAuth && !isAuthenticated) {
     // 1. Nếu cần đăng nhập mà chưa có token -> Đẩy về Login
@@ -113,13 +113,13 @@ router.beforeEach((to, from, next) => {
   } else if (to.path === '/login' && isAuthenticated) {
     // 2. Nếu đã đăng nhập mà cố vào lại trang Login -> Đẩy về Home
     next('/home'); // Sửa lại chữ thường cho khớp với path '/home'
-  } 
+  }
   else if (requiresAdmin && userRole !== 'admin') {
     // 3. Nếu route yêu cầu Admin, nhưng role không phải là admin -> Từ chối truy cập (Đẩy về Home hoặc trang báo lỗi 403)
     // Bạn có thể đổi '/home' thành '/403' nếu bạn có tạo một trang Unauthorized riêng
-    next(`/home`); 
+    next(`/home`);
   }
-   else {
+  else {
     // 4. Hợp lệ -> Cho qua
     next();
   }

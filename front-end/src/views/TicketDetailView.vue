@@ -198,8 +198,8 @@ const loadData = async () => {
     await fetchMessages(false);
 
   } catch (error) {
-    console.error("Lỗi lấy chi tiết vé:", error);
-    toast.error("Không thể tải thông tin vé.");
+    console.error("Error loading ticket details:", error);
+    toast.error("Cannot load ticket information.");
   } finally {
     isLoading.value = false;
   }
@@ -230,8 +230,8 @@ const fetchMessages = async (isLoadMore = false) => {
     nextCursor.value = response.nextCursor;
 
   } catch (error) {
-    console.error("Lỗi tải bình luận:", error);
-    toast.error("Không thể tải danh sách bình luận.");
+    console.error("Error loading comments:", error);
+    toast.error("Cannot load comment list.");
   } finally {
     isLoadingMore.value = false;
   }
@@ -257,16 +257,16 @@ const postComment = async () => {
     };
 
     await api.messages.create(payload);
-    toast.success("Bình luận đã được gửi!");
-    newComment.value = ''; // Xoá ô text
+    toast.success("Comment has been posted.");
+    newComment.value = ''; // Clear the text input
     
     // Đặt lại cursor và tải lại từ đầu để hiện tin nhắn mới nhất lên trên
     nextCursor.value = null;
     await fetchMessages(false);
     
   } catch (error) {
-    console.error("Lỗi gửi tin nhắn:", error);
-    toast.error("Không thể gửi bình luận.");
+    console.error("Error posting comment:", error);
+    toast.error("Cannot post comment.");
   } finally {
     isPosting.value = false;
   }
@@ -274,17 +274,18 @@ const postComment = async () => {
 
 // 5. Đóng Ticket
 const closeTicket = async () => {
-  if(!confirm("Bạn có chắc chắn muốn đóng ticket này không?")) return;
+  if(!confirm("Are you sure you want to close this ticket?")) return;
+
   
   try {
     await api.tickets.update(ticket.value._id, {
       ...ticket.value,
       status: 'Resolved'
     });
-    toast.success("Ticket đã được đóng.");
+    toast.success("Ticket has been closed.");
     await loadData(); 
   } catch (error) {
-    toast.error("Lỗi khi cập nhật trạng thái.");
+    toast.error("Error updating ticket status.");
   }
 };
 

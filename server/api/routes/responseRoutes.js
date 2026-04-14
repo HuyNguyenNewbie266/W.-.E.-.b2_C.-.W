@@ -2,8 +2,8 @@ const responseController = require('../controllers/responseController');
 const rateLimit = require('express-rate-limit');
 
 const aiLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 phút
-  max: 5, // Mỗi IP chỉ được hỏi AI tối đa 5 câu trong 1 phút
+  windowMs: 1 * 60 * 1000, 
+  max: 5,
   message: { message: "You have exceeded the allowed number of accesses. Please try again in 1 minute!" }
 });
 

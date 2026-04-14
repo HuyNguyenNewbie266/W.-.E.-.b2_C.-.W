@@ -92,14 +92,12 @@ exports.delete = async (req, res) => {
   }
 };
 
-// Đếm số lượng bài viết theo Category
 exports.get_category_counts = async (req, res) => {
   try {
     const counts = await Response.aggregate([
       { $group: { _id: '$category', count: { $sum: 1 } } }
     ]);
     
-    // Chuyển mảng thành object { 'Billing': 5, 'Network': 10 } cho dễ dùng ở frontend
     const result = {};
     counts.forEach(c => result[c._id] = c.count);
     
@@ -109,11 +107,9 @@ exports.get_category_counts = async (req, res) => {
   }
 };
 
-// Lấy các bài viết mới nhất (Recent Articles)
 exports.get_recent = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 4;
-    // Lấy bài mới nhất dựa vào createdAt
     const recent = await Response.find({}).sort({ createdAt: -1 }).limit(limit);
     res.json(recent);
   } catch (err) {
@@ -121,13 +117,11 @@ exports.get_recent = async (req, res) => {
   }
 };
 
-// Tìm kiếm có hỗ trợ Cursor Pagination
 exports.search = async (req, res) => {
   try {
     const { q, cursor, limit = 5 } = req.query;
     let query = {};
     
-    // Nếu có từ khóa tìm kiếm (q), tìm trong cả 4 trường (Không phân biệt hoa thường)
     if (q) {
       const regex = new RegExp(q, 'i');
       query.$or = [

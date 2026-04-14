@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -7,9 +7,9 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const port = 3000;
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 phút
-  max: 150, // Giới hạn mỗi IP tối đa 150 request trong 15 phút
-  message: { message: "Bạn đã vượt quá số lần truy cập cho phép. Vui lòng thử lại sau 15 phút!" },
+  windowMs: 15 * 60 * 1000, 
+  max: 150, 
+  message: { message: "You have exceeded the allowed number of accesses. Please try again in 15 minutes!" },
   standardHeaders: true, 
   legacyHeaders: false, 
 });

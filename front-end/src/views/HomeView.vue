@@ -136,14 +136,4 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
 
-// Biến lưu trữ giá trị từ thanh tìm kiếm
-const searchQuery = ref('');
-
-</script>
-
-<style scoped>
-/* Các class hero-gradient và glass đã được định nghĩa ở tailwind.css global nên ở đây không cần khai báo lại */
-</style>

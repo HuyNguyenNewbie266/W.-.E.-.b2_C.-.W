@@ -132,7 +132,7 @@ const getCurrentTime = () => {
 const chatHistory = ref([
   { 
     role: 'ai', 
-    text: 'Hello! Please enter any keywords or questions you have, and I will search through the internal knowledge base for you.',
+    text: 'Hello! Please enter any keywords, and I will search through the internal knowledge base for you.',
     
     time: getCurrentTime(),
     sources: []

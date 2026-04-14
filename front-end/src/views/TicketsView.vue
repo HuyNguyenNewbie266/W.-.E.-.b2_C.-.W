@@ -36,7 +36,7 @@
           
           <div class="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-fit">
             <button 
-              v-for="status in ['All', 'Open', 'In Progress', 'Resolved']" 
+              v-for="status in ['All', 'Open', 'Resolved']" 
               :key="status"
               @click="changeFilter(status)"
               :disabled="isLoading"
@@ -209,7 +209,6 @@ const formatDate = (dateString) => {
 const getStatusClasses = (status) => {
   const map = {
     'Open': { pill: 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400', dot: 'bg-blue-600' },
-    'In Progress': { pill: 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400', dot: 'bg-amber-600' },
     'Resolved': { pill: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400', dot: 'bg-emerald-600' }
   };
   return map[status] || { pill: 'bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-400', dot: 'bg-slate-600' };

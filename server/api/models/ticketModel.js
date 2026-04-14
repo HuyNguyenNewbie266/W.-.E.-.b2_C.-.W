@@ -33,7 +33,7 @@ const TicketSchema = new Schema({
     required: true },
 
   status: { type: String, 
-    enum: ['Open', 'In Progress', 'Resolved'], 
+    enum: ['Open', 'Resolved'], 
     default: 'Open' },
 
   relatedResponses: [{ 

@@ -101,13 +101,12 @@ const deleteItem = async (item) => {
   if (!confirm(`WARNING: Are you sure you want to delete this ${item.type}?`)) return;
   
   try {
-    // SỬ DỤNG item.type THAY VÌ item.code
     if (item.type === 'Response') await api.responses.delete(item._id);
     else if (item.type === 'Ticket') await api.tickets.delete(item._id);
     else await api.users.delete(item._id);
     
     toast.success(`${item.type} deleted successfully!`);
-    performSearch(); // Refresh list
+    performSearch(); 
   } catch (error) {
     toast.error("Delete failed!");
   }
