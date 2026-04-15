@@ -97,25 +97,25 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin); // Kiểm tra xem route có cần quyền admin không
+  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
 
   const isAuthenticated = !!localStorage.getItem('token');
-
   const userRole = localStorage.getItem('role');
 
   if (requiresAuth && !isAuthenticated) {
-    next('/login');
-  } else if (to.path === '/login' && isAuthenticated) {
-    next('/home'); 
+    return '/login';
   }
-  else if (requiresAdmin && userRole !== 'admin') {
-    next(`/home`);
+
+  if (to.path === '/login' && isAuthenticated) {
+    return '/home';
   }
-  else {
-    next();
+
+  if (requiresAdmin && userRole !== 'admin') {
+    return '/home';
   }
+
 });
 
 export default router;
