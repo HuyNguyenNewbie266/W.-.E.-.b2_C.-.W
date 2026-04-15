@@ -123,7 +123,10 @@ exports.search = async (req, res) => {
     let query = {};
     
     if (q) {
-      const regex = new RegExp(q, 'i');
+      // === ÁP DỤNG SAFE QUERY Ở ĐÂY ===
+      const safeQuery = q.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+      const regex = new RegExp(safeQuery, 'i');
+
       query.$or = [
         { title: regex },
         { value: regex },
@@ -145,7 +148,7 @@ exports.search = async (req, res) => {
       nextCursor = responses[responses.length - 1]._id;
     }
 
-    // Đếm tổng số lượng kết quả thỏa mãn
+    // Đếm tổng số lượng (cũng nên dùng query đã có $or)
     const total = await Response.countDocuments(query.$or ? { $or: query.$or } : {});
 
     res.json({ data: responses, nextCursor, total });
