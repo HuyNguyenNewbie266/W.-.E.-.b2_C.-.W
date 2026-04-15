@@ -81,17 +81,16 @@ exports.delete = async (req, res) => {
 exports.get_messages_by_ticket = async (req, res) => {
   try {
     const ticketId = req.params.id;
-    const { cursor, limit = 5 } = req.query; // Nhận cursor và limit
+    const { cursor, limit = 5 } = req.query; 
 
     let query = { ticket: ticketId };
     
     if (cursor) {
-      // Sắp xếp tin nhắn mới nhất lên đầu, nên lấy những tin cũ hơn cursor (nhỏ hơn cursor)
       query._id = { $lt: cursor };
     }
 
     const messages = await Message.find(query)
-      .sort({ _id: -1 }) // Tin nhắn mới nhất xếp trên cùng
+      .sort({ _id: -1 }) 
       .limit(parseInt(limit))
       .populate('sender', 'name');
 

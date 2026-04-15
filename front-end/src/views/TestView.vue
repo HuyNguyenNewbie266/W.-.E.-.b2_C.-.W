@@ -136,14 +136,11 @@ const toast = useToast();
 
 const isLoading = ref(true);
 
-// State Dữ liệu
 const availableSubjects = ref([]);
 const articles = ref([]);
 
-// State Kéo Thả
 const draggedSubject = ref(null);
 
-// Computed Properties kiểm tra tiến độ
 const matchedCount = computed(() => {
   return articles.value.filter(a => a.status === 'matched').length;
 });
@@ -157,7 +154,6 @@ const isCompleted = computed(() => {
   return articles.value.length > 0 && matchedCount.value === articles.value.length;
 });
 
-// Hàm trộn ngẫu nhiên (Fisher-Yates Shuffle)
 const shuffle = (array) => {
   let currentIndex = array.length, randomIndex;
   while (currentIndex !== 0) {
@@ -168,7 +164,6 @@ const shuffle = (array) => {
   return array;
 };
 
-// Khởi tạo bài Test
 const loadNewTest = async () => {
   isLoading.value = true;
   availableSubjects.value = [];
@@ -181,14 +176,12 @@ const loadNewTest = async () => {
       toast.warning("System needs at least 5 responses to generate a full test.");
     }
 
-    // Đổ dữ liệu cho cột trái và trộn lên
     availableSubjects.value = shuffle(data.map(item => ({
       id: item._id,
       key: item.key,
       title: item.title
     })));
 
-    // Đổ dữ liệu cho cột phải và trộn lên độc lập
     articles.value = shuffle(data.map(item => ({
       id: item._id,
       content: item.excerpt,
@@ -209,7 +202,6 @@ onMounted(() => {
   loadNewTest();
 });
 
-// LOGIC KÉO THẢ
 const startDrag = (event, subject) => {
   draggedSubject.value = subject;
   event.dataTransfer.effectAllowed = 'move';
@@ -218,21 +210,16 @@ const startDrag = (event, subject) => {
 const onDrop = (event, article) => {
   if (!draggedSubject.value || article.status === 'matched') return;
 
-  // SO SÁNH ID
   if (draggedSubject.value.id === article.id) {
-    // KẾT QUẢ ĐÚNG
     article.matchedSubject = draggedSubject.value;
     article.status = 'matched';
     article.isError = false;
     
-    // Xóa subject khỏi cột bên trái
     availableSubjects.value = availableSubjects.value.filter(s => s.id !== draggedSubject.value.id);
     draggedSubject.value = null;
   } else {
-    // KẾT QUẢ SAI
     article.isError = true;
     
-    // Tự động tắt lỗi đỏ sau 0.8 giây
     setTimeout(() => {
       article.isError = false;
     }, 800);
@@ -241,7 +228,6 @@ const onDrop = (event, article) => {
 </script>
 
 <style scoped>
-/* Hiệu ứng rung lắc khi trả lời sai */
 .shake-animation {
   animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
   transform: translate3d(0, 0, 0);
@@ -256,7 +242,6 @@ const onDrop = (event, article) => {
   40%, 60% { transform: translate3d(4px, 0, 0); }
 }
 
-/* Hiệu ứng Fade in cho bảng chúc mừng */
 .animate-fade-in {
   animation: fadeIn 0.6s ease-out forwards;
 }

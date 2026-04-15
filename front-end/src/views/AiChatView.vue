@@ -123,12 +123,10 @@ const userQuery = ref('');
 const isThinking = ref(false);
 const chatContainer = ref(null);
 
-// Hàm lấy giờ hiện tại (Format: 10:24 AM)
 const getCurrentTime = () => {
   return new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 };
 
-// Khởi tạo Chat History với câu chào đúng chuẩn
 const chatHistory = ref([
   { 
     role: 'ai', 
@@ -139,7 +137,6 @@ const chatHistory = ref([
   }
 ]);
 
-// Cuộn màn hình xuống đáy
 const scrollToBottom = async () => {
   await nextTick();
   if (chatContainer.value) {
@@ -147,42 +144,37 @@ const scrollToBottom = async () => {
   }
 };
 
-// Bấm Enter để gửi (Shift+Enter để xuống dòng)
 const handleEnter = (e) => {
-  if (e.shiftKey) return; // Cho phép xuống dòng
+  if (e.shiftKey) return; 
   sendMessage();
 };
 
-// Gửi tin nhắn
 const sendMessage = async () => {
   const query = userQuery.value.trim();
   if (!query || isThinking.value) return;
 
-  // 1. Thêm câu hỏi của User vào UI
   chatHistory.value.push({
     role: 'user',
     text: query,
     time: getCurrentTime()
   });
   
-  userQuery.value = ''; // Clear ô nhập
+  userQuery.value = ''; 
   isThinking.value = true;
   scrollToBottom();
 
   try {
-    // 2. Gọi API gửi cho RAG AI (Đã code ở Backend)
     const response = await api.responses.askAI({ question: query });
 
-    // 3. Nhận kết quả và đẩy vào UI
     chatHistory.value.push({
       role: 'ai',
       text: response.answer,
       time: getCurrentTime(),
-      sources: response.sources || [] // Mảng chứa { id, title } của bài viết
+      sources: response.sources || [] 
     });
 
   } catch (error) {
-    console.error("Lỗi khi gọi AI:", error);
+    console.error("Error:", error);
     chatHistory.value.push({
       role: 'ai',
       text: 'Sorry, there was an error connecting to the AI server. Please try again later.',
@@ -201,7 +193,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Làm mượt thanh cuộn trong khung chat */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }

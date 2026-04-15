@@ -86,7 +86,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-// Sửa lại đường dẫn import api nếu cần
 import { api } from '../helpers/apiHelper'; 
 import { useToast } from 'vue-toastification';
 
@@ -104,7 +103,6 @@ const isLoadingMore = ref(false);
 const nextCursor = ref(null);
 const LIMIT_PER_PAGE = 5;
 
-// Hàm Fetch Data với fallback chống lỗi
 const fetchResults = async (isLoadMore = false) => {
   try {
     if (isLoadMore) {
@@ -119,7 +117,6 @@ const fetchResults = async (isLoadMore = false) => {
       cursor: isLoadMore ? nextCursor.value : null
     });
 
-    // Bọc lại bằng biến an toàn, nếu backend lỗi trả về undefined thì tự fallback về []
     const safeData = response?.data || [];
 
     if (isLoadMore) {
@@ -132,42 +129,37 @@ const fetchResults = async (isLoadMore = false) => {
     totalResults.value = response?.total || 0;
 
   } catch (error) {
-    console.error("Lỗi tìm kiếm:", error);
+    console.error("Error searching:", error);
     toast.error('Failed to load search results.');
-    searchResults.value = []; // Reset về mảng rỗng nếu có lỗi
+    searchResults.value = []; 
   } finally {
     isLoading.value = false;
     isLoadingMore.value = false;
   }
 };
 
-// Gọi khi user bấm nút Search hoặc nhấn Enter
 const triggerSearch = () => {
   router.replace({ query: { q: searchQuery.value } });
-  nextCursor.value = null; // Reset con trỏ về null
+  nextCursor.value = null; 
   fetchResults(false);
 };
 
-// Gọi khi user bấm Load More
 const loadMore = () => {
   if (nextCursor.value) {
     fetchResults(true);
   }
 };
 
-// Khởi chạy khi vào trang
 onMounted(() => {
   searchQuery.value = route.query.q || '';
   fetchResults(false);
 });
 
-// --- HELPERS (Định dạng & Màu sắc) ---
 const formatDate = (dateString) => {
   if (!dateString) return '';
   return new Date(dateString).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
-// Gán màu cho Category dựa vào enum của DB
 const getThemeClasses = (category) => {
   switch (category) {
     case 'Account Management': return 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20';

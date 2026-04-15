@@ -35,11 +35,10 @@ const router = useRouter();
 const toast = useToast();
 
 const googleButtonConfig = ref({
-   // Ép tiếng Anh
-  theme: 'filled_blue', // Giao diện màu đen (rất hợp với Dark Mode)
-  size: 'large', // Nút to ra
-  shape: 'square', // Bo góc nhẹ (có thể đổi thành 'pill' để bo tròn hẳn)
-  width: '300', // Đặt chiều rộng cố định để nút trông cân đối
+  theme: 'filled_blue', 
+  size: 'large', 
+  shape: 'square', 
+  width: '300', 
   locale: 'en',
   text: 'continue_with',
 });
@@ -47,22 +46,18 @@ const googleButtonConfig = ref({
 
 const emit = defineEmits(['login-success']);
 
-// Hàm này tự động chạy khi người dùng chọn tài khoản Google thành công
 const handleGoogleCallback = async (response) => {
   try {
-    // response.credential chính là ID Token do Google cấp
     const res = await api.auth.googleLogin({
       credential: response.credential
     });
     
-    // Lưu Token và thông tin User vào localStorage
     localStorage.setItem('token', res.token);
     localStorage.setItem('user', JSON.stringify(res.user));
     localStorage.setItem('role', res.user.role);
     
     toast.success('Login successful');
     
-    // Chuyển hướng về trang chủ
     router.push('/');
     emit('login-success');
     

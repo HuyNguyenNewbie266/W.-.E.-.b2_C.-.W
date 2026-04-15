@@ -117,16 +117,14 @@
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-// Đảm bảo đường dẫn import api chuẩn xác với project của bạn
 import { api } from '../helpers/apiHelper'; 
 
 const router = useRouter();
 const toast = useToast();
 
 const isSubmitting = ref(false);
-const searchQuery = ref('');
+// const searchQuery = ref('');
 
-// Xử lý File Input
 const fileInput = ref(null);
 const triggerFileInput = () => {
   fileInput.value.click();
@@ -138,7 +136,6 @@ const handleFileUpload = (event) => {
   }
 };
 
-// Data Form (Đã bỏ field email)
 const form = reactive({
   subject: '',
   category: 'Technical Support',
@@ -146,12 +143,10 @@ const form = reactive({
   description: ''
 });
 
-// Submit Handler
 const submitTicket = async () => {
   isSubmitting.value = true;
   
   try {
-    // 1. Lấy thông tin user đang đăng nhập từ localStorage
     const userData = localStorage.getItem('user');
     if (!userData) {
       toast.error('You need to be logged in to perform this action!');
@@ -161,23 +156,21 @@ const submitTicket = async () => {
     
     const user = JSON.parse(userData);
 
-    // 2. Tạo payload khớp với model Ticket của backend
     const payload = {
-      submittedBy: user.id, // Lấy ID của user
-      email: user.email,    // Lấy Email của user
+      submittedBy: user.id, 
+      email: user.email,   
       subject: form.subject,
       category: form.category,
       priority: form.priority,
       description: form.description
     };
 
-    // 3. Gọi API thực tế
     await api.tickets.create(payload);
     
-    // 4. Thông báo và chuyển hướng
+  
     toast.success('Your ticket has been submitted successfully!');
   
-    router.push('/my-tickets'); // Đẩy về trang danh sách ticket
+    router.push('/my-tickets'); 
     
   } catch (error) {
     console.error('Failed to submit ticket', error);

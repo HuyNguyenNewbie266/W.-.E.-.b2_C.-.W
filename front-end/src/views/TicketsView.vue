@@ -143,7 +143,6 @@ const isLoadingMore = ref(false);
 const nextCursor = ref(null);
 const LIMIT_PER_PAGE = 5;
 
-// Hàm fetch data có tham số isLoadMore để phân biệt giữa F5 trang và bấm Load More
 const fetchTickets = async (isLoadMore = false) => {
   try {
     if (isLoadMore) {
@@ -169,7 +168,7 @@ const fetchTickets = async (isLoadMore = false) => {
     stats.value.pending = response.pending;
 
   } catch (error) {
-    console.error("Lỗi lấy vé:", error);
+    console.error("Failed to load tickets:", error);
     toast.error('Failed to load tickets');
   } finally {
     isLoading.value = false;

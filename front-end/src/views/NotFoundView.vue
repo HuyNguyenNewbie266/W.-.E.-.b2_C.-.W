@@ -9,7 +9,7 @@
       to="/home" 
       class="px-6 py-3 bg-primary text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 transition-colors"
     >
-      Quay về Trang chủ
+      Go Back Home
     </router-link>
   </div>
 </template>

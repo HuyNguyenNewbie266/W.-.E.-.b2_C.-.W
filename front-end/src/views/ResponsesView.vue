@@ -138,7 +138,6 @@ const recentArticles = ref([]);
 
 onMounted(async () => {
   try {
-    // Gọi song song 2 API đếm và lấy bài mới để load nhanh hơn
     const [countsData, recentData] = await Promise.all([
       api.responses.getCounts(),
       api.responses.getRecent(4)
@@ -150,12 +149,10 @@ onMounted(async () => {
   }
 });
 
-// Chuyển sang trang Search kèm theo từ khóa
 const handleSearch = () => {
   router.push({ name: 'Search', query: { q: searchQuery.value } });
 };
 
-// Bấm vào cục Category cũng tự động chuyển sang trang search với category đó
 const searchByCategory = (cat) => {
   router.push({ name: 'Search', query: { q: cat } });
 };

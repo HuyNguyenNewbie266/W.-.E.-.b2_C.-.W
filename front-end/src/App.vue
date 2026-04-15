@@ -129,7 +129,6 @@ const router = useRouter();
 const user = ref(null);
 const showMenu = ref(false);
 
-// Kiểm tra và lấy dữ liệu user khi component mount
 const checkUser = () => {
   const userData = localStorage.getItem('user');
   if (userData) {
@@ -147,7 +146,6 @@ const checkUser = () => {
 onMounted(() => {
   checkUser();
   
-  // Lắng nghe sự kiện để cập nhật lại trạng thái user nếu thay đổi ở tab khác hoặc ngay sau khi login
   window.addEventListener('storage', checkUser);
 });
 
@@ -155,12 +153,10 @@ onUnmounted(() => {
   window.removeEventListener('storage', checkUser);
 });
 
-// Toggle dropdown menu
 const toggleMenu = () => {
   showMenu.value = !showMenu.value;
 };
 
-// Đóng menu khi click ra ngoài (Optional nhưng nên có cho UX tốt hơn)
 const closeMenuOnClickOutside = (e) => {
   if (showMenu.value && !e.target.closest('.relative')) {
     showMenu.value = false;
@@ -171,15 +167,12 @@ onUnmounted(() => window.removeEventListener('click', closeMenuOnClickOutside));
 
 
 const handleLogout = () => {
-  // Xóa dữ liệu local
   localStorage.removeItem('token');
   localStorage.removeItem('user');
   
-  // Cập nhật state
   user.value = null;
   showMenu.value = false;
 
-  // Đẩy về trang login
   router.push('/login');
 };
 

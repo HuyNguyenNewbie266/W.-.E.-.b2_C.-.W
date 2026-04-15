@@ -105,8 +105,8 @@ exports.delete = async (req, res) => {
 
 exports.get_tickets_by_user = async (req, res) => {
   try {
-    const userId = req.params.id; // Lấy từ URL /tickets/user/:id
-    const { cursor, limit = 5, status } = req.query; // Lấy từ chuỗi params do Axios gửi lên
+    const userId = req.params.id; 
+    const { cursor, limit = 5, status } = req.query; 
 
     let query = { submittedBy: userId };
 

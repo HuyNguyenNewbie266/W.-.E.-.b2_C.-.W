@@ -112,10 +112,9 @@ import { useToast } from 'vue-toastification';
 const router = useRouter();
 const toast = useToast();
 
-const selectedType = ref('response'); // Mặc định mở form Response
+const selectedType = ref('response'); 
 const isSaving = ref(false);
 
-// Tách riêng 2 Form Data để ko bị lẫn lộn
 const resForm = reactive({ title: '', category: 'Technical Support', key: '', value: '' });
 const userForm = reactive({ name: '', email: '', password: '', role: 'staff' });
 
@@ -124,7 +123,7 @@ const submitForm = async () => {
   try {
     if (selectedType.value === 'response') {
       const payload = { ...resForm };
-      if (!payload.key) delete payload.key; // Xóa key để backend tự sinh mã
+      if (!payload.key) delete payload.key; 
       
       await api.responses.create(payload);
       toast.success('Knowledge Base Response created successfully!');
@@ -133,7 +132,7 @@ const submitForm = async () => {
       toast.success('System User created successfully!');
     }
     
-    router.push('/admin/search'); // Xong việc thì đẩy về trang tìm kiếm
+    router.push('/admin/search'); 
   } catch (error) {
     console.error(error);
     toast.error('Error creating record. Please check the data.');

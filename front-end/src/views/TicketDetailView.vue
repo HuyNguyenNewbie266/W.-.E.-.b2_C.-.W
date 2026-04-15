@@ -152,7 +152,6 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-// Đảm bảo import api đúng với đường dẫn trong project của bạn
 import { api } from '../helpers/apiHelper'; 
 
 const route = useRoute();
@@ -160,7 +159,7 @@ const router = useRouter();
 const toast = useToast();
 
 const ticket = ref({});
-const activities = ref([]); // Danh sách bình luận
+const activities = ref([]); 
 const newComment = ref('');
 const currentUser = ref(null);
 
@@ -168,11 +167,9 @@ const isLoading = ref(true);
 const isPosting = ref(false);
 const isLoadingMore = ref(false);
 
-// Con trỏ phân trang cho Comments
 const nextCursor = ref(null);
 const LIMIT_PER_PAGE = 5;
 
-// 1. Khởi tạo
 onMounted(async () => {
   const userData = localStorage.getItem('user');
   if (userData) {
@@ -185,16 +182,13 @@ onMounted(async () => {
   await loadData();
 });
 
-// 2. Tải dữ liệu trang
 const loadData = async () => {
   try {
     isLoading.value = true;
     const ticketId = route.params.id;
 
-    // Lấy Ticket Info
     ticket.value = await api.tickets.getById(ticketId);
 
-    // Lấy Messages (Comments) lần đầu
     await fetchMessages(false);
 
   } catch (error) {
@@ -205,28 +199,23 @@ const loadData = async () => {
   }
 };
 
-// 3. Hàm Fetch Messages (Xử lý Pagination)
 const fetchMessages = async (isLoadMore = false) => {
   try {
     if (isLoadMore) {
       isLoadingMore.value = true;
     }
 
-    // Gọi API getByTicket kèm params phân trang
     const response = await api.messages.getByTicket(ticket.value._id, {
       limit: LIMIT_PER_PAGE,
       cursor: isLoadMore ? nextCursor.value : null
     });
 
     if (isLoadMore) {
-      // Nối thêm bình luận cũ xuống dưới
       activities.value = [...activities.value, ...response.data];
     } else {
-      // Tải lại trang đầu tiên (khi mới vào hoặc vừa gửi tin nhắn mới)
       activities.value = response.data;
     }
 
-    // Cập nhật con trỏ cho lần bấm tiếp theo
     nextCursor.value = response.nextCursor;
 
   } catch (error) {
@@ -237,14 +226,12 @@ const fetchMessages = async (isLoadMore = false) => {
   }
 };
 
-// Hàm gọi khi bấm "View older comments"
 const loadMoreMessages = () => {
   if (nextCursor.value) {
     fetchMessages(true);
   }
 };
 
-// 4. Gửi Comment mới
 const postComment = async () => {
   if (!newComment.value.trim()) return;
   
@@ -258,9 +245,8 @@ const postComment = async () => {
 
     await api.messages.create(payload);
     toast.success("Comment has been posted.");
-    newComment.value = ''; // Clear the text input
+    newComment.value = ''; 
     
-    // Đặt lại cursor và tải lại từ đầu để hiện tin nhắn mới nhất lên trên
     nextCursor.value = null;
     await fetchMessages(false);
     
@@ -272,7 +258,6 @@ const postComment = async () => {
   }
 };
 
-// 5. Đóng Ticket
 const closeTicket = async () => {
   if(!confirm("Are you sure you want to close this ticket?")) return;
 
@@ -289,7 +274,6 @@ const closeTicket = async () => {
   }
 };
 
-// --- CÁC HÀM TIỆN ÍCH ---
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A';
   return new Date(dateString).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -303,7 +287,6 @@ const formatTime = (dateString) => {
 const getStatusClasses = (status) => {
   const map = {
     'Open': { pill: 'bg-blue-50 text-blue-600 ring-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:ring-blue-500/20', dot: 'bg-blue-600 dark:bg-blue-400' },
-    'In Progress': { pill: 'bg-amber-50 text-amber-600 ring-amber-100 dark:bg-amber-500/10 dark:text-amber-400 dark:ring-amber-500/20', dot: 'bg-amber-600 dark:bg-amber-400' },
     'Resolved': { pill: 'bg-emerald-50 text-emerald-600 ring-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20', dot: 'bg-emerald-600 dark:bg-emerald-400' }
   };
   return map[status] || { pill: 'bg-slate-50 text-slate-600 ring-slate-200', dot: 'bg-slate-600' };

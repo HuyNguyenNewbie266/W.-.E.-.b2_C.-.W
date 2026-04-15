@@ -87,24 +87,21 @@ import { useToast } from 'vue-toastification';
 const route = useRoute();
 const toast = useToast();
 
-// State lưu trữ bài viết
 const article = ref({});
 const isLoading = ref(true);
 
-// Tải dữ liệu khi mở trang
 onMounted(async () => {
   try {
-    const articleId = route.params.id; // Lấy ID từ URL (VD: /responses/123)
+    const articleId = route.params.id; 
     article.value = await api.responses.getById(articleId);
   } catch (error) {
-    console.error("Lỗi lấy bài viết:", error);
+    console.error("Error loading article:", error);
     toast.error('Failed to load the article.');
   } finally {
     isLoading.value = false;
   }
 });
 
-// Hàm format ngày tháng
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A';
   return new Date(dateString).toLocaleDateString('en-GB', { 

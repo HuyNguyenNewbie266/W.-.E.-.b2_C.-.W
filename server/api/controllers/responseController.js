@@ -123,7 +123,6 @@ exports.search = async (req, res) => {
     let query = {};
     
     if (q) {
-      // === ÁP DỤNG SAFE QUERY Ở ĐÂY ===
       const safeQuery = q.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
       const regex = new RegExp(safeQuery, 'i');
 
@@ -148,7 +147,6 @@ exports.search = async (req, res) => {
       nextCursor = responses[responses.length - 1]._id;
     }
 
-    // Đếm tổng số lượng (cũng nên dùng query đã có $or)
     const total = await Response.countDocuments(query.$or ? { $or: query.$or } : {});
 
     res.json({ data: responses, nextCursor, total });
@@ -157,20 +155,15 @@ exports.search = async (req, res) => {
   }
 };
 
-// Lấy 5 câu hỏi ngẫu nhiên cho bài Test
 exports.get_random_test_data = async (req, res) => {
   try {
-    // Dùng $sample của MongoDB để bốc ngẫu nhiên 5 document
     const randomResponses = await Response.aggregate([
       { $sample: { size: 5 } }
     ]);
 
-    // Xử lý dữ liệu trước khi gửi về Frontend
     const testData = randomResponses.map(item => {
-      // 1. Xóa toàn bộ thẻ HTML (vì nội dung lưu từ Editor thường có thẻ <p>, <strong>...)
       const plainText = item.value.replace(/<[^>]*>?/gm, '').trim();
       
-      // 2. Trích xuất câu đầu tiên (cắt tới dấu chấm, hỏi chấm, hoặc chấm than đầu tiên)
       const firstSentenceMatch = plainText.match(/^[^.!?]+[.!?]/);
       const excerpt = firstSentenceMatch ? firstSentenceMatch[0] : plainText;
 
@@ -193,11 +186,8 @@ exports.ask_ai = async (req, res) => {
   try {
     const userQuestion = req.body.question;
 
-    // 1. HÀM TẨY RỬA KÝ TỰ ĐẶC BIỆT (Tránh sập Regex)
     const escapeRegex = (text) => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
-    // 2. TẠO CÂU TRUY VẤN AN TOÀN
-    // Tách câu hỏi thành từng chữ, xóa khoảng trắng thừa, tẩy rửa ký tự và ghép lại bằng dấu '|'
     const safeQuery = userQuestion
       .split(' ')
       .filter(word => word.trim() !== '') 
@@ -206,7 +196,6 @@ exports.ask_ai = async (req, res) => {
 
     const regex = new RegExp(safeQuery, 'i');
 
-    // 3. TÌM KIẾM BÀI VIẾT (Giữ nguyên như cũ)
     const foundArticles = await Response.find({
       $or: [
         { title: regex },
@@ -215,7 +204,6 @@ exports.ask_ai = async (req, res) => {
       ]
     }).limit(3);
 
-    // Nếu database hoàn toàn không có gì khớp xíu nào
     if (foundArticles.length === 0) {
       return res.json({ 
         answer: "Sorry, this request is outside of my scope or I couldn't find relevant documents.",
@@ -223,28 +211,24 @@ exports.ask_ai = async (req, res) => {
       });
     }
 
-    // 2. GỘP VÀO PROMPT (Dùng hàm buildPrompt ở Bước 2)
     const finalPrompt = buildPrompt(userQuestion, foundArticles);
 
-    // 3. GỌI OLLAMA Ở LOCALHOST
     const aiResponse = await axios.post('http://localhost:11434/api/generate', {
       model: 'qwen2.5:7b',
       prompt: finalPrompt,
-      stream: false // Nhận kết quả 1 lần, không cần stream từng chữ
+      stream: false 
     });
 
     let answerText = aiResponse.data.response;
 
-    // 4. TRẢ KẾT QUẢ VỀ FRONTEND
-    // Frontend sẽ dựa vào mảng sources này để tạo thẻ <router-link>
     res.json({
       answer: answerText,
       sources: foundArticles.map(a => ({ id: a._id, title: a.title }))
     });
 
   } catch (error) {
-    console.error("Lỗi gọi AI:", error);
-    res.status(500).json({ message: "Lỗi kết nối AI Server." });
+    console.error("Error:", error);
+    res.status(500).json({ message: "Error connecting to AI Server." });
   }
 };
 

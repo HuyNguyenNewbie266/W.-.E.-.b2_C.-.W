@@ -120,16 +120,14 @@ const isLoading = ref(true);
 const isSaving = ref(false);
 const formData = ref({});
 
-// Lấy id và type từ thanh URL
 const id = route.params.id;
 const typeParam = route.query.type || ''; 
 
-// Chuyển type về chữ thường và so sánh chính xác
 const entityType = computed(() => {
   const t = typeParam.toLowerCase();
   if (t === 'response') return 'response';
   if (t === 'ticket') return 'ticket';
-  return 'user'; // Mặc định còn lại là user
+  return 'user'; 
 });
 
 onMounted(async () => {
